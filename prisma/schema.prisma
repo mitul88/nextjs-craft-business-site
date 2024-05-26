@@ -1,0 +1,135 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  email      String   @unique @db.VarChar(150)
+  password   String   @db.VarChar(150)
+  role       Role     @default(EDITOR)
+  created_at DateTime @default(now()) @db.Timestamp(0)
+  updated_at DateTime @updatedAt
+  profile          User_profile?
+}
+
+model User_profile {
+  id            Int              @id @default(autoincrement())
+  name      String           @db.VarChar(150)
+  phone     String           @db.VarChar(150)
+  fax       String           @db.VarChar(150)
+  add       String           @db.VarChar(150)
+  postcode  String           @db.VarChar(50)
+  city      String           @db.VarChar(50)
+  state     String           @db.VarChar(50)
+  country   String           @db.VarChar(50)
+  user_id       Int              @unique
+  user          User             @relation(fields: [user_id], references: [id])
+  created_at    DateTime         @default(now()) @db.Timestamp(0)
+  updated_at    DateTime         @updatedAt
+}
+
+model Category {
+  id         Int       @id @default(autoincrement())
+  name       String    @unique @db.VarChar(150)
+  img        String    @db.VarChar(300)
+  products   Product[]
+  created_at DateTime  @default(now()) @db.Timestamp(0)
+  updated_at DateTime  @updatedAt
+}
+
+model Product {
+  id             Int            @id @default(autoincrement())
+  title          String         @db.VarChar(200)
+  short_des      String         @db.VarChar(500)
+  price          Float
+  discount       Boolean
+  discount_price Float
+  image          String         @db.VarChar(200)
+  stock          Boolean
+  star           Float
+  remark         Product_remark
+  category_id    Int
+  created_at     DateTime       @default(now()) @db.Timestamp(0)
+  updated_at     DateTime       @updatedAt
+
+  product_details  Product_details?
+  product_sliders  Product_slider?
+
+  category Category @relation(fields: [category_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
+}
+
+model Product_details {
+  id         Int      @id @default(autoincrement())
+  img1       String   @db.VarChar(200)
+  img2       String   @db.VarChar(200)
+  img3       String   @db.VarChar(200)
+  img4       String   @db.VarChar(200)
+  img5       String   @db.VarChar(200)
+  img6       String   @db.VarChar(200)
+  img7       String   @db.VarChar(200)
+  img8       String   @db.VarChar(200)
+  des        String   @db.Text
+  color      String   @db.VarChar(200)
+  size       String   @db.VarChar(200)
+  product_id Int      @unique
+  created_at DateTime @default(now()) @db.Timestamp(0)
+  updated_at DateTime @updatedAt
+  products   Product  @relation(fields: [product_id], references: [id])
+}
+
+model Product_slider {
+  id         Int      @id @default(autoincrement())
+  title      String   @db.VarChar(200)
+  short_des  String   @db.VarChar(200)
+  price      String   @db.VarChar(200)
+  image      String   @db.VarChar(200)
+  product_id Int      @unique
+  product    Product  @relation(fields: [product_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  created_at DateTime @default(now()) @db.Timestamp(0)
+  updated_at DateTime @updatedAt
+}
+
+model Policy {
+  id         Int           @id @default(autoincrement())
+  type       Policies_type
+  des        String        @db.Text
+  created_at DateTime      @default(now()) @db.Timestamp(0)
+  updated_at DateTime      @updatedAt
+}
+
+model Feature {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(255)
+  image       String   @db.VarChar(300)
+  description String   @db.Text
+  created_at  DateTime @default(now()) @db.Timestamp(0)
+  updated_at  DateTime @updatedAt
+}
+
+enum Role {
+  EDITOR
+  ADMIN
+  SUPERADMIN
+}
+
+enum Product_remark {
+  POPULAR
+  NEW
+  TOP
+  SPECIAL
+  TRENDING
+  REGULAR
+}
+
+enum Policies_type {
+  ABOUT
+  REFUND
+  TERMS
+  CONTACT
+  COMPLAIN
+}
