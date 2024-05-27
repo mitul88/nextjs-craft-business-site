@@ -13,8 +13,8 @@ export const JWThelper = {
     );
     return token;
   },
-  verifyJWT: async (token) => {
-    const decoded = await jwt.verify(token, process.env.JWT_SECRET);
+  verifyJWT: (token) => {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     return decoded;
   },
 };

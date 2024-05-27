@@ -7,7 +7,9 @@ export const passwordHelper = {
     return password;
   },
   verifyPassword: async (passwordFromClient, verifyWith) => {
-    await bcrypt.compare(passwordFromClient, verifyWith);
-    return;
+    const client = passwordFromClient.toString();
+    const app = verifyWith.toString();
+    const validation = await bcrypt.compare(client, app);
+    return validation;
   },
 };
