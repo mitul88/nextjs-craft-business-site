@@ -5,8 +5,6 @@ const prisma = new PrismaClient();
 
 export async function GET(req) {
   try {
-    const url = new URL(req.url);
-    const searchParams = new URLSearchParams(url.searchParams);
     const categories = await prisma.category.findMany();
     return NextResponse.json(
       { message: "all categories", categories },

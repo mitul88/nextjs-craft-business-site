@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-export async function GET(req, res) {
+export async function POST(req, res) {
   try {
   } catch (error) {
     console.log(error);
