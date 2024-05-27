@@ -47,18 +47,14 @@ model Product {
   title          String         @db.VarChar(200)
   short_des      String         @db.VarChar(500)
   price          Float
-  discount       Boolean
-  discount_price Float
   image          String         @db.VarChar(200)
-  stock          Boolean
-  star           Float
+  stock          Boolean        @default(true)
   remark         Product_remark
   category_id    Int
   created_at     DateTime       @default(now()) @db.Timestamp(0)
   updated_at     DateTime       @updatedAt
 
   product_details  Product_details?
-  product_sliders  Product_slider?
 
   category Category @relation(fields: [category_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
 }
@@ -82,14 +78,13 @@ model Product_details {
   products   Product  @relation(fields: [product_id], references: [id])
 }
 
-model Product_slider {
+model Banner {
   id         Int      @id @default(autoincrement())
   title      String   @db.VarChar(200)
   short_des  String   @db.VarChar(200)
   price      String   @db.VarChar(200)
   image      String   @db.VarChar(200)
   product_id Int      @unique
-  product    Product  @relation(fields: [product_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
   created_at DateTime @default(now()) @db.Timestamp(0)
   updated_at DateTime @updatedAt
 }
