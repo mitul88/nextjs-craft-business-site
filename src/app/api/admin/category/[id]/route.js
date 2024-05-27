@@ -62,3 +62,31 @@ export async function PUT(req, { params }) {
     );
   }
 }
+
+export async function DELETE(req, { params }) {
+  const categoryId = parseInt(params.id);
+  try {
+    const category = await prisma.category.findUnique({
+      where: {
+        id: categoryId,
+      },
+    });
+    const imgPath = category.img;
+    await prisma.category.delete({
+      where: {
+        id: categoryId,
+      },
+    });
+
+    if (imgPath) {
+      fs.unlink(imgPath, (err) => {
+        if (err) {
+          throw err;
+        }
+      });
+    }
+    return NextResponse.json({ message: "category deleted" });
+  } catch (err) {
+    return NextResponse.json({ message: "internal error" }, { status: 500 });
+  }
+}
