@@ -11,16 +11,26 @@ export async function POST(req) {
     const categoryName = formData.get("name");
     const file = formData.get("img");
 
+    const categoryExists = await prisma.category.findUnique({
+      where: {
+        name: categoryName,
+      },
+    });
+
+    if (categoryExists) {
+      return NextResponse.json(
+        { message: "category by same name already exists" },
+        { status: 400 }
+      );
+    }
+
     if (!file) {
       return NextResponse.json(
         { message: "image is not provided" },
         { status: 400 }
       );
     }
-    console.log(file);
-    const incomingFileName = file.name;
     const incomingFileType = file.type;
-    const extension = incomingFileName.split(".").pop();
     if (incomingFileType !== "image/jpeg") {
       if (incomingFileType !== "image/png") {
         return NextResponse.json(
