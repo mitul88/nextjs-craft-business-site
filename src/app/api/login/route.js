@@ -26,14 +26,13 @@ export async function POST(req) {
       password,
       user.password
     );
-    console.log(validUser);
     if (!validUser) {
       return NextResponse.json(
         { message: "incorrect password" },
         { status: 400 }
       );
     } else {
-      let token = JWThelper.generateJWT(user);
+      let token = await JWThelper.generateJWT(user);
       let expireDuration = new Date(Date.now() + 24 * 60 * 60 * 1000);
       const cookieString = `token=${token}; expires=${expireDuration.toUTCString()} ; httpOnly=true; path=/`;
       return NextResponse.json(

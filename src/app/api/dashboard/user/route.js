@@ -1,4 +1,3 @@
-import { JWThelper } from "@/utils/JWTherlper";
 import { passwordHelper } from "@/utils/passwordHelper";
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
@@ -20,7 +19,7 @@ export async function POST(req, res) {
       data: {
         email: userData["email"],
         password: hashedPassword,
-        role: userRole.toUpperCase(),
+        role: userRole?.toUpperCase(),
       },
     });
     return NextResponse.json({ message: "user created" }, { status: 201 });
