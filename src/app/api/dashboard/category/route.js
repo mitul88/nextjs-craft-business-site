@@ -17,6 +17,18 @@ export async function POST(req) {
         { status: 400 }
       );
     }
+    console.log(file);
+    const incomingFileName = file.name;
+    const incomingFileType = file.type;
+    const extension = incomingFileName.split(".").pop();
+    if (incomingFileType !== "image/jpeg") {
+      if (incomingFileType !== "image/png") {
+        return NextResponse.json(
+          { message: "incorrect image file format" },
+          { status: 400 }
+        );
+      }
+    }
     const buffer = Buffer.from(await file.arrayBuffer());
     const filename = Date.now() + file.name.replaceAll(" ", "_");
 
