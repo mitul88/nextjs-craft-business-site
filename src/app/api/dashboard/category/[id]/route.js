@@ -12,6 +12,19 @@ export async function PUT(req, { params }) {
   const name = formData.get("name");
   const file = formData.get("img");
   try {
+    const category = await prisma.category.findUnique({
+      where: {
+        id: categoryId,
+      },
+    });
+
+    if (!category) {
+      return NextResponse.json(
+        { message: "invalid category id" },
+        { status: 400 }
+      );
+    }
+
     if (!file) {
       await prisma.category.update({
         where: {
@@ -33,11 +46,7 @@ export async function PUT(req, { params }) {
     const uploadDir = path.join(process.cwd(), "public/uploads/" + filename);
 
     await writeFile(uploadDir, buffer);
-    const category = await prisma.category.findUnique({
-      where: {
-        id: categoryId,
-      },
-    });
+
     const previousImgPath = category.img;
     await prisma.category.update({
       where: {
@@ -71,6 +80,12 @@ export async function DELETE(req, { params }) {
         id: categoryId,
       },
     });
+    if (!category) {
+      return NextResponse.json(
+        { message: "invalid category id" },
+        { status: 400 }
+      );
+    }
     const imgPath = category.img;
     await prisma.category.delete({
       where: {
