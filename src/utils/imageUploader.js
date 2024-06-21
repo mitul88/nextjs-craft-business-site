@@ -27,3 +27,16 @@ export async function imageUploadLocal(file) {
     fileTypeCheckResult,
   };
 }
+
+export async function multiImageUploadLocal(arr) {
+  let result = new Array(arr.length);
+  const imageUploader = async (arr) => {
+    if (arr.length <= 0) return;
+    const uploadResult = await imageUploadLocal(arr[0]);
+    result.push(uploadResult);
+    arr.shift();
+    await imageUploader(arr);
+  };
+  await imageUploader(arr);
+  return result;
+}

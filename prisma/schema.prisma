@@ -8,29 +8,29 @@ datasource db {
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
-  email      String   @unique @db.VarChar(150)
-  password   String   @db.VarChar(150)
-  role       Role     @default(EDITOR)
-  created_at DateTime @default(now()) @db.Timestamp(0)
-  updated_at DateTime @updatedAt
-  profile          User_profile?
+  id         Int           @id @default(autoincrement())
+  email      String        @unique @db.VarChar(150)
+  password   String        @db.VarChar(150)
+  role       Role          @default(EDITOR)
+  created_at DateTime      @default(now()) @db.Timestamp(0)
+  updated_at DateTime      @updatedAt
+  profile    User_profile?
 }
 
 model User_profile {
-  id            Int              @id @default(autoincrement())
-  name      String           @db.VarChar(150)
-  phone     String           @db.VarChar(150)
-  fax       String           @db.VarChar(150)
-  add       String           @db.VarChar(150)
-  postcode  String           @db.VarChar(50)
-  city      String           @db.VarChar(50)
-  state     String           @db.VarChar(50)
-  country   String           @db.VarChar(50)
-  user_id       Int              @unique
-  user          User             @relation(fields: [user_id], references: [id])
-  created_at    DateTime         @default(now()) @db.Timestamp(0)
-  updated_at    DateTime         @updatedAt
+  id         Int      @id @default(autoincrement())
+  name       String   @db.VarChar(150)
+  phone      String   @db.VarChar(150)
+  fax        String   @db.VarChar(150)
+  add        String   @db.VarChar(150)
+  postcode   String   @db.VarChar(50)
+  city       String   @db.VarChar(50)
+  state      String   @db.VarChar(50)
+  country    String   @db.VarChar(50)
+  user_id    Int      @unique
+  user       User     @relation(fields: [user_id], references: [id])
+  created_at DateTime @default(now()) @db.Timestamp(0)
+  updated_at DateTime @updatedAt
 }
 
 model Category {
@@ -42,20 +42,35 @@ model Category {
   updated_at DateTime  @updatedAt
 }
 
+model Supplier {
+  id             Int      @id @default(autoincrement())
+  name           String   @db.VarChar(200)
+  contact_person String   @db.VarChar(200)
+  phone          String   @db.VarChar(200)
+  address        String   @db.VarChar(200)
+  comments       String   @db.VarChar(500)
+  products       Product[]
+  created_at     DateTime @default(now()) @db.Timestamp(0)
+  updated_at     DateTime @updatedAt
+}
+
 model Product {
-  id             Int            @id @default(autoincrement())
-  title          String         @db.VarChar(200)
-  short_des      String         @db.VarChar(500)
-  price          Float
-  image          String         @db.VarChar(200)
-  stock          Boolean        @default(true)
-  remark         Product_remark
-  category_id    Int
-  created_at     DateTime       @default(now()) @db.Timestamp(0)
-  updated_at     DateTime       @updatedAt
+  id          Int            @id @default(autoincrement())
+  title       String         @db.VarChar(200)
+  short_des   String         @db.VarChar(500)
+  cost        Float
+  price       Float
+  image       String         @db.VarChar(200)
+  stock       Boolean        @default(true)
+  inventory   Int
+  remark      Product_remark
+  created_at  DateTime       @default(now()) @db.Timestamp(0)
+  updated_at  DateTime       @updatedAt
 
-  product_details  Product_details?
-
+  product_details Product_details?
+  category_id Int
+  supplier_id Int      
+  supplier    Supplier @relation(fields: [supplier_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
   category Category @relation(fields: [category_id], references: [id], onDelete: Restrict, onUpdate: Cascade)
 }
 
