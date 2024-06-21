@@ -19,7 +19,7 @@ export const JWThelper = {
   },
   verifyJWT: async (token) => {
     const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-    const decoded = await jwtVerify(token, secret);
+    const decoded = await jwtVerify(token["value"], secret);
     return decoded["payload"];
   },
 };
