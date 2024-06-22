@@ -8,7 +8,8 @@ export async function imageUploadLocal(file) {
   let uploadDir = "";
   if (incomingFileType !== "image/jpeg") {
     if (incomingFileType !== "image/png") {
-      return (fileTypeCheckResult = false);
+      fileTypeCheckResult = false;
+      return { uploadDir, fileTypeCheckResult };
     }
   }
   const buffer = Buffer.from(await file.arrayBuffer());
@@ -29,14 +30,68 @@ export async function imageUploadLocal(file) {
 }
 
 export async function multiImageUploadLocal(arr) {
-  let result = new Array(arr.length);
-  const imageUploader = async (arr) => {
-    if (arr.length <= 0) return;
-    const uploadResult = await imageUploadLocal(arr[0]);
-    result.push(uploadResult);
-    arr.shift();
-    await imageUploader(arr);
+  // recieving the file object in an array
+  let imgDirArr = [];
+  let uploadStatus = true;
+  for (let i = 0; i < arr.length; i++) {
+    let result = await imageUploadLocal(arr[i]);
+    if (result.fileTypeCheckResult === false) {
+      uploadStatus = false;
+      if (i < 1) {
+        return { uploadStatus, imgDirArr };
+      } else {
+        for (let dir of imgDirArr) {
+          fs.unlink(dir, (err) => {
+            if (err) {
+              console.log(err);
+              throw err;
+            }
+          });
+        }
+      }
+      return {
+        uploadStatus,
+        imgDirArr,
+      };
+    } else {
+      let imgObj = {};
+      let imgData = `img${i + 1}`;
+      imgObj[imgData] = result.uploadDir;
+      imgDirArr.push(imgObj);
+    }
+  }
+  return {
+    uploadStatus,
+    imgDirArr,
   };
-  await imageUploader(arr);
-  return result;
+}
+
+export async function formDataMultiImageUploadLocal(formData) {
+  let imgDirArr = [];
+  let i = 1;
+  let uploadStatus = false;
+  for (let data of formData) {
+    if (data[0] === "image") {
+      const result = await imageUploadLocal(data[1]);
+      if (result.fileTypeCheckResult == false) {
+        uploadStatus = false;
+        if (i == 0) {
+          console.log("no image uploaded yet");
+        }
+        return {
+          uploadStatus,
+          imgDirArr,
+        };
+      }
+      const obj = {};
+      let imgName = "img" + i;
+      obj[imgName] = result["uploadDir"];
+      imgDirArr.push(obj);
+      i++;
+    }
+  }
+  return {
+    uploadStatus,
+    imgDirArr,
+  };
 }
