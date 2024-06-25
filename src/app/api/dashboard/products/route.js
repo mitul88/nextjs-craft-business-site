@@ -4,16 +4,16 @@ import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-export async function POST(req, res) {
+export async function POST(req) {
   const formData = await req.formData();
   const title = formData.get("title");
   const short_des = formData.get("short_des");
-  const cost = formData.get("cost");
-  const price = formData.get("price");
-  const inventory = formData.get("inventory");
+  const cost = parseFloat(formData.get("cost"));
+  const price = parseFloat(formData.get("price"));
+  const inventory = parseInt(formData.get("inventory"));
   const remark = formData.get("remark");
-  const category_id = formData.get("category_id");
-  const supplier_id = formData.get("supplier_id");
+  const category_id = parseInt(formData.get("category_id"));
+  const supplier_id = parseInt(formData.get("supplier_id"));
   const featureImage = formData.get("feature_img");
 
   const des = formData.get("des");
@@ -21,25 +21,18 @@ export async function POST(req, res) {
   const size = formData.get("size");
   const multiImages = formData.get("image");
 
+  // return;
   try {
-    if (
-      !title ||
-      !cost ||
-      !price ||
-      category_id ||
-      supplier_id ||
-      featureImage
-    ) {
+    if (!title || !cost || !price || !category_id || !featureImage) {
       return NextResponse.json(
         {
-          message:
-            "title, price, category id, supplier id, feature image and cost required",
+          message: "title, price, category id, feature image and cost required",
         },
         { status: 400 }
       );
     }
 
-    if (!file) {
+    if (!featureImage) {
       return NextResponse.json(
         { message: "image is not provided" },
         { status: 400 }
@@ -69,27 +62,35 @@ export async function POST(req, res) {
         multiUploadResult = await multiImageUploadLocal(images);
       }
     }
-
-    const product = await prisma.client.create({
+    if (multiUploadResult.uploadStatus === false) {
+      return NextResponse(
+        { message: "please select correct image file format" },
+        { status: 400 }
+      );
+    }
+    let imgDirArr = multiUploadResult.imgDirArr;
+    console.log(imgDirArr);
+    const product = await prisma.product.create({
       data: {
         title: title,
-        short_des: short_des?.short_des,
-        cost: cost?.cost,
-        price: price?.price,
-        inventory: inventory?.inventory,
-        remark: remark?.remarks,
-        category_id: category_id?.category_id,
+        short_des: short_des,
+        cost: cost,
+        price: price,
+        inventory: inventory,
+        remark: remark,
+        category_id: category_id,
         feature_image: imageUpload.uploadDir,
+        supplier_id: supplier_id,
       },
     });
 
     const product_details = await prisma.product_details.create({
       data: {
         product_id: product.id,
-        des: des?.des,
-        color: color?.color,
-        size: size?.size,
-        image: multiImages?.multiUploadResult["imgDirArr"],
+        des: des,
+        color: color,
+        size: size,
+        image: imgDirArr,
       },
     });
 

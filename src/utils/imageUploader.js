@@ -54,10 +54,7 @@ export async function multiImageUploadLocal(arr) {
         imgDirArr,
       };
     } else {
-      let imgObj = {};
-      let imgData = `img${i + 1}`;
-      imgObj[imgData] = result.uploadDir;
-      imgDirArr.push(imgObj);
+      imgDirArr.push(result.uploadDir);
     }
   }
   return {
