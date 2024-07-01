@@ -12,6 +12,15 @@ export async function GET(req) {
     const orderBy = searchParams.get("orderBy") || "desc";
 
     const produtcs = await prisma.product.findMany({
+      select: {
+        id: true,
+        title: true,
+        short_des: true,
+        feature_image: true,
+        stock: true,
+        remark: true,
+        created_at: true,
+      },
       take: parseInt(limit),
       skip: (page - 1) * limit,
       orderBy: {

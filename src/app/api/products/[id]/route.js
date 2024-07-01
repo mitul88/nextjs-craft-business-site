@@ -10,7 +10,11 @@ export async function GET(req, { params }) {
       where: {
         id: id,
       },
+      include: {
+        product_details: true,
+      },
     });
+
     return NextResponse.json(
       { message: "product fetched", product },
       { status: 200 }
