@@ -1,10 +1,14 @@
+import AdminTopbar from "@/app/(components)/admin/admin-topbar";
 import React from "react";
 
 const DashboardMasterLayout = ({ children }) => {
   return (
     <section>
-      <div></div>
-      <div>{children}</div>
+      <AdminTopbar />
+      <div className="flex">
+        <div>left</div>
+        <div>{children}</div>
+      </div>
     </section>
   );
 };
