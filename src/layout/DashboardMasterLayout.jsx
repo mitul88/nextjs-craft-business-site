@@ -10,7 +10,7 @@ const DashboardMasterLayout = ({ children }) => {
         <div className="w-96 h-full">
           <AdminSidebar />
         </div>
-        <div className="">{children}</div>
+        <div className="bg-[#EDF1F6] w-full p-10">{children}</div>
       </div>
     </section>
   );

@@ -13,28 +13,28 @@ const AdminSidebar = () => {
         <div className="flex flex-col">
           <Link
             href="/"
-            className="flex items-center mb-2 p-2 px-3 rounded-xl hover:bg-[#407B3F] hover:text-[#fff] ease-in-out duration-500"
+            className="flex items-center mb-2 p-2 px-3 rounded-xl text-[#2B2B2B] hover:bg-[#407B3F] hover:text-[#fff] ease-in-out duration-500"
           >
             <MdDashboard className="mr-2" />
             Overview
           </Link>
           <Link
-            href="/category"
-            className="flex items-center mb-2 p-2 px-3 rounded-xl hover:bg-[#407B3F] hover:text-[#fff] ease-in-out duration-500"
+            href="category"
+            className="flex items-center mb-2 p-2 px-3 rounded-xl text-[#2B2B2B] hover:bg-[#407B3F] hover:text-[#fff] ease-in-out duration-500"
           >
             <MdCategory className="mr-2" />
             Category
           </Link>
           <Link
-            href="/product"
-            className="flex items-center mb-2 p-2 px-3 rounded-xl hover:bg-[#407B3F] hover:text-[#fff] ease-in-out duration-500"
+            href="product"
+            className="flex items-center mb-2 p-2 px-3 rounded-xl text-[#2B2B2B] hover:bg-[#407B3F] hover:text-[#fff] ease-in-out duration-500"
           >
             <MdShoppingBag className="mr-2" />
             Product
           </Link>
           <Link
             href="/banner"
-            className="flex items-center mb-2 p-2 px-3 rounded-xl hover:bg-[#407B3F] hover:text-[#fff] ease-in-out duration-500"
+            className="flex items-center mb-2 p-2 px-3 rounded-xl text-[#2B2B2B] hover:bg-[#407B3F] hover:text-[#fff] ease-in-out duration-500"
           >
             <MdOutlinePlayCircleFilled className="mr-2" />
             Banner
