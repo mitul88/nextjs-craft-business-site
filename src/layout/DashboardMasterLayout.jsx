@@ -1,13 +1,16 @@
+import AdminSidebar from "@/app/(components)/admin/admin-sidebar";
 import AdminTopbar from "@/app/(components)/admin/admin-topbar";
 import React from "react";
 
 const DashboardMasterLayout = ({ children }) => {
   return (
-    <section>
+    <section className="w-full h-screen">
       <AdminTopbar />
-      <div className="flex">
-        <div>left</div>
-        <div>{children}</div>
+      <div className="w-full h-full flex flex-row">
+        <div className="w-96 h-full">
+          <AdminSidebar />
+        </div>
+        <div className="">{children}</div>
       </div>
     </section>
   );
